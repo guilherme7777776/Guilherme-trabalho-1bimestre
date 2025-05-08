@@ -1,4 +1,4 @@
-// Recupera os dados do sessionStorage
+
 let dados = sessionStorage.getItem('dadosForm');
 let texto = document.getElementById("totalPreco")
 if (dados) {
@@ -29,7 +29,7 @@ if (dados) {
       carrinhoElement.appendChild(itemCarrinho);
     });
 
-    // Aqui preenche a div existente com o total
+    
   
     texto.textContent = `Total da Compra: R$ ${totalCompra.toFixed(2)}`;
   
