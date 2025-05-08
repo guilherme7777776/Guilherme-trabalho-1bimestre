@@ -16,7 +16,7 @@ if (dados) {
       
       const totalProduto = produto.preco * produto.qtd;
       
-      totalCompra = totalProduto;
+      totalCompra += totalProduto;
       
       itemCarrinho.innerHTML = `
         <h3>${produto.nome}</h3>
@@ -46,3 +46,4 @@ if (dados) {
 function querycode(){
   window.location.href = "qr.html"
 }
+
