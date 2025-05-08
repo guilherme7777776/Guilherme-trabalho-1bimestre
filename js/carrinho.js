@@ -46,4 +46,3 @@ if (dados) {
 function querycode(){
   window.location.href = "qr.html"
 }
-
