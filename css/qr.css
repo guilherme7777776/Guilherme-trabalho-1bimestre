@@ -1,0 +1,8 @@
+body {
+    display: flex;
+    justify-content: center;  /* Alinha horizontalmente */
+    align-items: center;      /* Alinha verticalmente */
+    height: 100vh;            /* Ocupa 100% da altura da tela */
+    margin: 0;                /* Remove margens padrão */
+}
+
