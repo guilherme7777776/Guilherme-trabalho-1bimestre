@@ -50,10 +50,10 @@ function alterarQuantidade(idProduto, operacao) {
   
   
 function littlecar() {
-    // Serializando os dados
+    
     sessionStorage.setItem('dadosForm', JSON.stringify(listaproduto));
   
-    // Redireciona para a página carrinho.html
+    
     console.log('dadosForm');
     window.location.href="carrinho.html"
 }
