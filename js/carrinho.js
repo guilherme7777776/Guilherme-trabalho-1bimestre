@@ -1,6 +1,7 @@
 
 let dados = sessionStorage.getItem('dadosForm');
 let texto = document.getElementById("totalPreco")
+let vazio = 0
 if (dados) {
   let produtos = JSON.parse(dados);
   let produtosNoCarrinho = produtos.filter(produto => produto.qtd > 0);
@@ -37,6 +38,7 @@ if (dados) {
 
   } else {
     carrinhoElement.innerHTML = "<p>Seu carrinho está vazio.</p>";
+    vazio = 1
   }
 
 } else {
@@ -44,5 +46,12 @@ if (dados) {
 }
 
 function querycode(){
-  window.location.href = "qr.html"
+  if(vazio === 1){
+    alert("O carrinho está vazio")
+    return;
+  }else{
+    window.location.href = "qr.html"
+  }
+  
 }
+
