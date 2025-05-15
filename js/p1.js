@@ -25,7 +25,7 @@ let listaproduto = [
     new produto(14, "Camisa Mustaine Wrote 'Em All", 45, 0, "https://cdn.tshirtclassic.com/image/2022/04/19/metallica-mustaine-wrote-em-all-shirt-unisex-sweatshirt.jpg"),
     new produto(15, "Camisa Beatles", 50, 0, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5JBRsRb6LQMZsAqW6C6y3BTqTUMBOnA7izA&s"),
     new produto(16, "Blew - Nirvana", 85, 0, "https://upload.wikimedia.org/wikipedia/en/d/d1/NirvanaBlewEP.jpg"),
-    new produto(17, "Seven Inches of Satanic Panic - Ghost", 95, 0, "https://upload.wikimedia.org/wikipedia/en/a/af/Ghost_-_Seven_Inches_of_Satanic_Panic.jpg"),
+    new produto(17, "Seven Inches of Satanic Panic - Ghost", 666, 0, "https://upload.wikimedia.org/wikipedia/en/a/af/Ghost_-_Seven_Inches_of_Satanic_Panic.jpg"),
     new produto(18, "Iron Lung - Radiohead", 90, 0, "https://upload.wikimedia.org/wikipedia/pt/b/b3/Radiohead_-_My_Iron_Lung.jpg"),
     new produto(19, "Helloween - Helloween", 90, 0, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3xz0LqFEKMvSVqeZYkbg0MB8ZJvRT3wwT6w&s")
 ];
