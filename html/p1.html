@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loja de Produtos</title>
-  <link rel="stylesheet" href="./../css/p1.css">
+  <link rel="stylesheet" href="../css/p1.css">
 </head>
 <body>
-
-  <h1>Loja de Produtos</h1>
+  <main>
+    <h1>Loja de Produtos</h1>
   <input class="botao-fixo" type="button" value="Carrinho" onclick="littlecar()">
   <nav>
     <button onclick="mostrar('vinil')">Vinil</button>
@@ -16,16 +16,16 @@
     <button onclick="mostrar('eps')">EPS</button>
   </nav>
 
-  <div id="home" class="pagina ativa">
+  <section id="home" class="pagina ativa">
     <h2>Bem-vindo!</h2>
     <p>Escolha uma categoria acima para navegar.</p>
-  </div>
+  </section>
 
-  <div style="height:2000px" id="vinil" class="pagina">
+  <section style="height:2000px" id="vinil" class="pagina">
     <h2>Vinil</h2>
     <section>
 
-      <div class="produto">
+      <article class="produto">
         <img src="https://preview.redd.it/the-rust-in-peace-album-cover-is-so-great-v0-9fls69h6v6od1.jpeg?width=640&crop=smart&auto=webp&s=fb8a2eff6281801eebc3f03aa8848fe2333f701d" alt="Vinil 1">
         <div class="texto">
           <h3>Rust in Peace - Megadeth</h3>
@@ -36,22 +36,9 @@
           <span id="1" class="quantidade">0</span>
           <button class="botao-adicionar" onclick="alterarQuantidade('1', 1)">+</button>
         </div>
-      </div>
+      </article>
 
-      <div class="produto">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOMJm17Ni6qy2JDilmax_4G2vavqV6zXhG8g&s" alt="Vinil 2">
-        <div class="texto">
-          <h3>Pássaro de fogo- Paula Fernandes</h3>
-          <p>R$ 65,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('2', -1)">-</button>
-          <span id="2" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('2', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
+      <article class="produto">
         <img src="https://upload.wikimedia.org/wikipedia/pt/4/4f/Weezer_-_Blue_Album.jpg" alt="Vinil 3">
         <div class="texto">
           <h3>Weezer "Blue album" - Weezer</h3>
@@ -62,133 +49,16 @@
           <span id="3" class="quantidade">0</span>
           <button class="botao-adicionar" onclick="alterarQuantidade('3', 1)">+</button>
         </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXtosl6dg0FfwKuLy50MKLKcNOGkWpCuICrg&s" alt="Vinil 4">
-        <div class="texto">
-          <h3>Vida - Padre Fabio de Melo</h3>
-          <p>R$ 70,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('4', -1)">-</button>
-          <span id="4" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('4', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://m.media-amazon.com/images/I/71QVLO-+6wL._UF1000,1000_QL80_.jpg" alt="Vinil 5">
-        <div class="texto">
-          <h3>Black Clouds & Silver Linings - Dream Theater</h3>
-          <p>R$ 55,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('5', -1)">-</button>
-          <span id="5" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('5', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/0/05/TempleOfShadowsAngra.jpg" alt="Vinil 6">
-        <div class="texto">
-          <h3>Temple of Shadows - Angra</h3>
-          <p>R$ 62,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('6', -1)">-</button>
-          <span id="6" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('6', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://www.metalblade.com/us/newspics/MercyfulFate-Melissa-40th.jpg" alt="Vinil 7">
-        <div class="texto">
-          <h3>Melissa - Mercyful Fate</h3>
-          <p>R$ 75,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('7', -1)">-</button>
-          <span id="7" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('7', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/8/8f/220px-Mezmerize-LP.jpg" alt="Vinil 8">
-        <div class="texto">
-          <h3>Mezmerize - System of a Down</h3>
-          <p>R$ 80,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('8', -1)">-</button>
-          <span id="8" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('8', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/2/28/Daft_Punk_Discovery.jpg" alt="Vinil 9">
-        <div class="texto">
-          <h3>Discovery - Daft Punk</h3>
-          <p>R$ 85,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('9', -1)">-</button>
-          <span id="9" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('9', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png" alt="Vinil 10">
-        <div class="texto">
-          <h3>Michael Jackson - Thriller</h3>
-          <p>R$ 90,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('10', -1)">-</button>
-          <span id="10" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('10', 1)">+</button>
-        </div>
-      </div>
+      </article>
 
     </section>
-  </div>
+  </section>
 
-  <div id="camisas" class="pagina">
+  <section id="camisas" class="pagina">
     <h2>Camisas</h2>
     <section>
 
-      <div class="produto">
-        <img src="https://m.media-amazon.com/images/I/61SosF6VGHS._AC_SY350_QL65_.jpg" alt="Camisa 1">
-        <div class="texto">
-          <h3>Camisa da Banda Xavlegbmaofffassssitimiwoamndutroabcwapwaeiippohfffx</h3>
-          <p>R$ 39,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('11', -1)">-</button>
-          <span id="11" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('11', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://mockup-api.teespring.com/v3/image/R2aP02mOvfrFBn0QMj4vANHz11w/800/800.jpg" alt="Camisa 2">
-        <div class="texto">
-          <h3>Camisa Megadeth - Piss Sells</h3>
-          <p>R$ 42,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('12', -1)">-</button>
-          <span id="12" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('12', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
+      <article class="produto">
         <img src="https://acdn-us.mitiendanube.com/stores/002/152/760/products/camisa-santos-2023-oficial-umbro-branca-preto1-6c52899fb15401485a16841947458043-1024-1024.jpeg" alt="Camisa 3">
         <div class="texto">
           <h3>Camisa do Santos</h3>
@@ -199,56 +69,16 @@
           <span id="13" class="quantidade">0</span>
           <button class="botao-adicionar" onclick="alterarQuantidade('13', 1)">+</button>
         </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://cdn.tshirtclassic.com/image/2022/04/19/metallica-mustaine-wrote-em-all-shirt-unisex-sweatshirt.jpg" alt="Camisa Mustaine">
-        <div class="texto">
-          <h3>Camisa Mustaine Wrote 'Em All</h3>
-          <p>R$ 45,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('14', -1)">-</button>
-          <span id="14" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('14', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5JBRsRb6LQMZsAqW6C6y3BTqTUMBOnA7izA&s" alt="Camisa Beatles">
-        <div class="texto">
-          <h3>Camisa Beatles</h3>
-          <p>R$ 50,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('15', -1)">-</button>
-          <span id="15" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('15', 1)">+</button>
-        </div>
-      </div>
+      </article>
 
     </section>
-  </div>
-
-  <div id="eps" class="pagina">
+  </section>
+  
+  <section id="eps" class="pagina">
     <h2>EPS</h2>
     <section>
       
-      <div class="produto">
-        <img src="https://upload.wikimedia.org/wikipedia/en/d/d1/NirvanaBlewEP.jpg" alt="EPS 1">
-        <div class="texto">
-          <h3>Blew - Nirvana</h3>
-          <p>R$ 85,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('16', -1)">-</button>
-          <span id="16" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('16', 1)">+</button>
-        </div>
-      </div>
-
-      
-      <div class="produto">
+      <article class="produto">
         <img src="https://upload.wikimedia.org/wikipedia/en/a/af/Ghost_-_Seven_Inches_of_Satanic_Panic.jpg" alt="EPS 2">
         <div class="texto">
           <h3>Seven Inches of Satanic Panic - Ghost</h3>
@@ -259,37 +89,11 @@
           <span id="17" class="quantidade">0</span>
           <button class="botao-adicionar" onclick="alterarQuantidade('17', 1)">+</button>
         </div>
-      </div>
+      </articles>
 
-      
-      <div class="produto">
-        <img src="https://upload.wikimedia.org/wikipedia/pt/b/b3/Radiohead_-_My_Iron_Lung.jpg" alt="EPS 3">
-        <div class="texto">
-          <h3>Iron Lung - Radiohead</h3>
-          <p>R$ 90,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('18', -1)">-</button>
-          <span id="18" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('18', 1)">+</button>
-        </div>
-      </div>
-
-      <div class="produto">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3xz0LqFEKMvSVqeZYkbg0MB8ZJvRT3wwT6w&s" alt="EPS 4">
-        <div class="texto">
-          <h3>Helloween - Helloween</h3>
-          <p>R$ 90,00</p>
-        </div>
-        <div class="quantidade-container">
-          <button class="botao-adicionar" onclick="alterarQuantidade('19', -1)">-</button>
-          <span id="19" class="quantidade">0</span>
-          <button class="botao-adicionar" onclick="alterarQuantidade('19', 1)">+</button>
-        </div>
-      </div>
     </section>
-  </div>
-
+  </section>
+  </main>
   <script src="./../js/p1.js"></script>
 </body>
 </html>
