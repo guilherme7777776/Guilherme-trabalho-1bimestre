@@ -7,21 +7,21 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// Middlewares para JSON e urlencoded (útil para login)
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir arquivos estáticos da pasta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Configuração básica da sessão
+// Sessão
 app.use(session({
   secret: 'segredo-trabalho',
   resave: false,
   saveUninitialized: true
 }));
 
-// Função para ler CSV com separador ';'
+// Função para ler qualquer CSV com separador ;
 function lerCSV(caminho) {
   return new Promise((resolve, reject) => {
     const resultados = [];
@@ -33,17 +33,17 @@ function lerCSV(caminho) {
   });
 }
 
-// Rota para retornar os produtos
+// Rota: Produtos
 app.get('/api/produtos', async (req, res) => {
   try {
-    const caminhoCSV = path.join(__dirname, 'dados_em_casa', 'crud.csv.csv');
+    const caminhoCSV = path.join(__dirname, 'dados_em_casa', 'backup.csv.csv');
     let produtos = await lerCSV(caminhoCSV);
 
     produtos = produtos.map(prod => ({
       ...prod,
       preco: Number(prod.preco),
       quantidade: Number(prod.quantidade),
-      img: `/imagens/${prod.img}`,  // ajusta caminho para pasta pública
+      img: `/imagens/${prod.img}`,
       categoria: prod.categoria.toLowerCase()
     }));
 
@@ -54,9 +54,50 @@ app.get('/api/produtos', async (req, res) => {
   }
 });
 
-// Aqui você pode adicionar rotas para login, logout e gerenciamento de sessão
+// Rota: Login
+app.post('/api/login', async (req, res) => {
+  const { usuario, senha } = req.body;
+
+  try {
+    const caminhoUsuarios = path.join(__dirname, 'dados_em_casa', 'usuarios.csv');
+    
+    const usuarios = await lerCSV(caminhoUsuarios);
+    
+    const user = usuarios.find(u => u.nome === usuario && u.senha === senha);
+    console.log(user);
+    if (user) {
+      req.session.usuario = {
+        nome: user.usuario,
+        tipo: user.tipo.toLowerCase()
+      };
+      res.json({ sucesso: true, tipo: user.tipo.toLowerCase() });
+    } else {
+      res.json({ sucesso: false });
+    }
+  } catch (err) {
+    console.error('Erro ao processar login:', err);
+    res.status(500).json({ erro: 'Erro interno no login' });
+  }
+});
+
+// Rota: Logout
+app.post('/api/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.json({ sucesso: true });
+  });
+});
+
+// Rota: Verificação de login
+app.get('/api/usuario', (req, res) => {
+  if (req.session.usuario) {
+    res.json({ logado: true, usuario: req.session.usuario });
+  } else {
+    res.json({ logado: false });
+  }
+});
 
 // Iniciar o servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+

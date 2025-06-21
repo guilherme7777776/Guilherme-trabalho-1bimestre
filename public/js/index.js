@@ -1,29 +1,24 @@
+async function logar() {
+  const nome = document.getElementById("idnome").value;
+  const senha = document.getElementById("idsenha").value;
 
-class usuario{
-    constructor(nome, senha, tipo){
-        this.nome = nome
-        this.senha = senha
-        this.tipo = tipo
-    }
+  const resposta = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ usuario: nome, senha: senha })
+  });
+
+  const resultado = await resposta.json();
+  console.log(resultado);
+  if (resultado.sucesso) {
+    alert("Parabéns, login realizado com sucesso!");
+    window.location.href = "p1.html"; // Redireciona para a loja
+  } else {
+    alert("Login incorreto. Verifique usuário e senha.");
+  }
 }
 
-let listausuarios= [
-    new usuario("berola","sla1","admin"),
-    new usuario("WonderOfU","sla2","cliente"),
-    new usuario("abobrinha","sla3","cliente"),
-];
-
-console.log(listausuarios);
-
-function logar(){
-    const name = document.getElementById("idnome").value;
-    const password = document.getElementById("idsenha").value;
-    let l = listausuarios
-    for(let i = 0; i<l.length; i++){
-        if(password === l[i].senha && name === l[i].nome){
-            alert("parabens");
-            window.location.href='p1.html'
-        }
-    }
-    alert("login incorreto");
+// Botão de criar conta ainda não implementado
+function foofighters() {
+  alert("Cadastro ainda não implementado.");
 }
