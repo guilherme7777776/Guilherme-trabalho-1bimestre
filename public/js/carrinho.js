@@ -3,8 +3,9 @@ let dados = sessionStorage.getItem('dadosForm');
 let texto = document.getElementById("totalPreco")
 console.log(dados)
 let vazio = 0
+let produtos = JSON.parse(dados);
+console.log(produtos)
 if (dados) {
-  let produtos = JSON.parse(dados);
   let produtosNoCarrinho = produtos.filter(produto => produto.qtd > 0);
   
   const carrinhoElement = document.getElementById('carrinho');
@@ -47,7 +48,7 @@ if (dados) {
 }
 
 function ir(){
-  sessionStorage.setItem('dadosForm', JSON.stringify(dados));
+  sessionStorage.setItem('dadosForm', JSON.stringify(produtos));
   window.location.href="index.html"
 }
 function querycode(){
