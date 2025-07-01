@@ -3,7 +3,7 @@ const session = require('express-session');
 const fs = require('fs');
 const csv = require('csv-parser');
 const path = require('path');
-
+const fsPromises = require('fs/promises');
 const app = express();
 const PORT = 3000;
 
@@ -67,10 +67,10 @@ app.post('/api/login', async (req, res) => {
     console.log(user);
     if (user) {
       req.session.usuario = {
-        nome: user.usuario,
+        nome: user.nome,
         tipo: user.tipo.toLowerCase()
       };
-      res.json({ sucesso: true, tipo: user.tipo.toLowerCase() });
+      res.json({ sucesso: true, nome:user.nome, tipo: user.tipo.toLowerCase() });
     } else {
       res.json({ sucesso: false });
     }
@@ -101,3 +101,30 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
 
+//cadastro
+app.post('/api/cadastrar', async (req, res) => {
+  const { usuario, senha } = req.body;
+
+  if (!usuario || !senha) {
+    return res.json({ sucesso: false, mensagem: 'Dados inválidos' });
+  }
+
+  try {
+    const caminhoUsuarios = path.join(__dirname, 'dados_em_casa', 'usuarios.csv');
+    const usuarios = await lerCSV(caminhoUsuarios);
+
+    const existe = usuarios.find(u => u.usuario === usuario);
+    if (existe) {
+      return res.json({ sucesso: false, mensagem: 'Nome de usuário já existe.' });
+    }
+
+    // Adiciona novo usuário com tipo "cliente"
+    const linhaNova = `\n${usuario};${senha};cliente`;
+    await fsPromises.appendFile(caminhoUsuarios, linhaNova, 'utf8');
+
+    res.json({ sucesso: true });
+  } catch (err) {
+    console.error('Erro ao salvar usuário:', err);
+    res.status(500).json({ sucesso: false, mensagem: 'Erro ao cadastrar.' });
+  }
+});

@@ -1,28 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./../css/index.css">
-    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loja de Produtos</title>
+  <link rel="stylesheet" href="../css/index.css" />
 </head>
 <body>
-    <h1>Loja</h1>
-    <label for="idnome">Nome</label>
-    <br>
-    <input type="text" id="idnome">
-    <br>
-    <label for="idsenha">Senha</label>
-    <br>
-    <input type="text" id="idsenha">
-    <br>
-    
-    <input type="button" value="logar" onclick="logar()">
-    <br><br>
-    <input type="button" value="criar conta" onclick="foofighters()">
+  <main>
+    <h1>Loja de Produtos</h1>
+    <input class="botao-fixo" type="button" value="Carrinho" onclick="littlecar()" />
+    <nav>
+      <button onclick="mostrar('album')">Vinil</button>
+      <button onclick="mostrar('camisa')">Camisas</button>
+      <button onclick="mostrar('ep')">EPS</button>
+    </nav>
 
-    <script src="./../js/index.js"></script>
+    <section id="home" class="pagina ativa">
+      <h2>Bem-vindo!</h2>
+      <p>Escolha uma categoria acima para navegar.</p>
+    </section>
+
+    <section id="album" class="pagina">
+      <h2>Vinil</h2>
+      <section>
+        <!-- Produtos da categoria album serão inseridos aqui pelo JS -->
+      </section>
+    </section>
+
+    <section id="camisa" class="pagina">
+      <h2>Camisas</h2>
+      <section>
+        <!-- Produtos da categoria camisa serão inseridos aqui pelo JS -->
+      </section>
+    </section>
+
+    <section id="ep" class="pagina">
+      <h2>EPS</h2>
+      <section>
+        <!-- Produtos da categoria ep serão inseridos aqui pelo JS -->
+      </section>
+    </section>
+  </main>
+
+  <script src="../js/index.js"></script>
 </body>
 </html>
-

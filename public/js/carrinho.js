@@ -1,6 +1,7 @@
 
 let dados = sessionStorage.getItem('dadosForm');
 let texto = document.getElementById("totalPreco")
+console.log(dados)
 let vazio = 0
 if (dados) {
   let produtos = JSON.parse(dados);
@@ -45,6 +46,10 @@ if (dados) {
   alert('Nenhum produto encontrado no carrinho.');
 }
 
+function ir(){
+  sessionStorage.setItem('dadosForm', JSON.stringify(dados));
+  window.location.href="index.html"
+}
 function querycode(){
   if(vazio === 1){
     alert("O carrinho está vazio")
@@ -55,3 +60,13 @@ function querycode(){
   
 }
 
+
+fetch('/api/usuario')
+  .then(res => res.json())
+  .then(data => {
+    if (data.logado) {
+    console.log('Usuário logado:', data.usuario.nome, '| Tipo:', data.usuario.tipo);
+    } else {
+      console.log('Nenhum usuário logado.');
+    }
+ });

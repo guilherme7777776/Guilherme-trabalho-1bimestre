@@ -1,163 +1,118 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(45deg, #ff0000, #ff9900, #33cc33, #3399ff, #9933cc, #ff33cc);
-    background-size: 600% 600%;
-    animation: rainbow 5s ease infinite;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    color: #fff;
-}
-
-@keyframes rainbow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes tremor {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    50% { transform: translateX(10px); }
-    75% { transform: translateX(-10px); }
-    100% { transform: translateX(10px); }
-}
-
-.container {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 800px;
+    margin: 0;
+    padding: 0;
     text-align: center;
+    background-color: #f8f8f8;
 }
-
-h1 {
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 36px;
-}
-
-.nomes-times {
-    margin-bottom: 20px;
-}
-
-.nomes-times label {
-    font-size: 18px;
-    margin-right: 10px;
-}
-
-.nomes-times input {
+  
+nav {
+    background-color: #333;
     padding: 10px;
-    font-size: 18px;
-    margin: 5px 0 15px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    width: 200px;
-    text-align: center;
 }
-
-.placar {
-    display: flex;
-    justify-content: space-evenly;
-    margin-bottom: 20px;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.time {
-    text-align: center;
-    flex: 1;
-    color: #fff;
-}
-
-.score {
-    font-size: 120px;
-    font-weight: bold;
-    color: #ffcc00;
-    margin: 10px 0;
-}
-
-.buttons {
-    margin-top: 10px;
-}
-
-.set-buttons {
-    margin-top: 20px;
-}
-
-.set {
-    font-size: 30px;
-    font-weight: bold;
-    color: #ffcc00;
-    margin: 10px 0;
-}
-
-.btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
+  
+nav button {
+    margin: 10px;
     padding: 10px 20px;
-    font-size: 18px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
     cursor: pointer;
     border-radius: 5px;
-    margin: 5px;
-    transition: background-color 0.3s;
+    font-size: 16px;
 }
-
-.btn:hover {
-    background-color: #45a049;
+  
+nav button:hover {
+    background-color: #0056b3;
 }
-
-#resetBtn {
-    background-color: #f44336;
+  
+.pagina {
+    display: none;
+}
+  
+.pagina.ativa {
+    display: block;
+}
+  
+section {
+    display: flex;
+    flex-direction: column;  /* Organiza os produtos em colunas verticais */
+    align-items: center;
     margin-top: 20px;
 }
-
-#resetBtn:hover {
-    background-color: #e53935;
-}
-
-.historico {
-    margin-top: 30px;
-    text-align: left;
-    max-height: 200px;
-    overflow-y: auto;
-    border-top: 2px solid #ccc;
-    padding-top: 10px;
-}
-
-.historico h3 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.historico div {
+  
+.produto {
+    width: 90%;  /* Ocupa quase toda a largura da tela */
+    height: 150px;  /* Altura fixa para cada produto */
+    background-color: #e0e0e0;
+    margin: 15px 0;
+    display: flex;
+    align-items: center;  /* Alinha todos os itens na vertical */
+    justify-content: space-between;  /* Espaço entre os itens */
+    border: 1px solid #ccc;
     font-size: 18px;
-    color: #555;
-    margin-bottom: 5px;
+    text-align: center;
+    border-radius: 5px;
+    padding: 0 10px;
+}
+  
+.produto img {
+    width: 140px;  /* Largura da imagem */
+    height: 140px;  /* Altura da imagem */
+    object-fit: cover;  /* Ajusta a imagem para não distorcer */
+    border-radius: 5px;
+}
+  
+.produto .texto {
+    flex-grow: 1;  /* O texto ocupa o espaço restante */
+    padding: 0 20px;
+}
+  
+.botao-adicionar {
+    padding: 10px 15px;
+    background-color: #28a745;  /* Cor verde para o botão de adicionar */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+  
+.botao-adicionar:hover {
+    background-color: #218838;
+}
+  
+.quantidade-container {
+    display: flex;
+    align-items: center;
+}
+  
+.quantidade {
+    margin: 0 10px;
+    font-size: 20px;
+}
+  
+.botao-fixo {
+    position: fixed;
+    bottom: 0px; /* distância do fundo da tela */
+    right: 0px;  /* distância da borda direita da tela */
+    padding: 20px 60px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-/* Efeitos de vitória */
-.vitoria-time-a {
-    animation: tremor 0.5s ease-out;
-    background-color: rgba(0, 128, 0, 0.8); /* Verde para a vitória da Equipe A */
-    color: #fff;
+.botao-fixo:hover {
+    background-color: #0056b3;
 }
-
-.vitoria-time-b {
-    animation: tremor 0.5s ease-out;
-    background-color: rgba(255, 99, 71, 0.8); /* Vermelho para a vitória da Equipe B */
-    color: #fff;
+  
+.quantidade {
+    margin: 0 10px;
+    font-size: 20px;
 }
+  
+  
