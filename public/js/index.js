@@ -1,11 +1,11 @@
 // Classe para representar cada produto
 class produto {
-    constructor(id, nome, preco, qtd, imagem, categoria) {
+    constructor(id, nome, preco, qtd, img, categoria) {
       this.id = id;
       this.nome = nome;
       this.preco = preco;
       this.qtd = qtd;
-      this.imagem = imagem;
+      this.img = img;
       this.categoria = categoria;
     }
 }
@@ -38,7 +38,7 @@ function criarElementoProduto(prod) {
     artigo.classList.add('produto');
   
     artigo.innerHTML = `
-      <img src="${prod.imagem}" alt="${prod.nome}">
+      <img src="${prod.img}" alt="${prod.nome}">
       <div class="texto">
         <h3>${prod.nome}</h3>
         <p>R$ ${prod.preco.toFixed(2)}</p>
@@ -53,21 +53,39 @@ function criarElementoProduto(prod) {
     return artigo;
 }
   
-  
+function urlSemCache(url) {
+  const separador = url.includes('?') ? '&' : '?';
+  return url + separador + '_=' + new Date().getTime();
+}
+
   // Carrega os produtos do servidor e insere na página
 async function carregarProdutos() {
     try {
-      const resposta = await fetch('/api/produtos');
+      const resposta = await fetch(urlSemCache('/api/produtos')); 
       const dados = await resposta.json();
-  
-      listaproduto = dados.map(prod => new produto(
-        prod.id,
-        prod.nome,
-        prod.preco,
-        prod.quantidade,
-        prod.img,
-        prod.categoria.toLowerCase()
-      ));
+      const listabruta = sessionStorage.getItem('dadosForm');
+      let lista = JSON.parse(listabruta);
+      if (lista){
+        listaproduto = lista.map(prod => new produto(
+          prod.id,
+          prod.nome,
+          prod.preco,
+          prod.quantidade,
+          prod.img,
+          prod.categoria.toLowerCase()
+        ));
+        console.log(lista);
+      }else{
+        listaproduto = dados.map(prod => new produto(
+          prod.id,
+          prod.nome,
+          prod.preco,
+          prod.quantidade,
+          prod.img,
+          prod.categoria.toLowerCase()
+        ));
+      }
+      
   
       const categorias = {};
       listaproduto.forEach(prod => {
@@ -141,17 +159,66 @@ function littlecar() {
 }
   
 
-  // Inicia o carregamento dos produtos ao abrir a página
+  
 window.addEventListener('DOMContentLoaded', carregarProdutos);
 
-fetch('/api/usuario')
+//verificar se tem usuario logado
+//fetch('/api/usuario')
+//  .then(res => res.json())
+//  .then(data => {
+//    if (data.logado) {
+//    console.log('Usuário logado:', data.usuario.nome, '| Tipo:', data.usuario.tipo);
+//    } else {
+//      console.log('Nenhum usuário logado.');
+//    }
+// });
+
+function toggleFormulario() {
+  const secao = document.getElementById('adicionar-produto');
+  const botao = document.getElementById('botao-toggle-formulario');
+
+  if (secao.style.display === 'none') {
+    secao.style.display = 'block';
+    botao.textContent = '✖️ Fechar';
+  } else {
+    secao.style.display = 'none';
+    botao.textContent = '➕ Adicionar Produto';
+  }
+}
+
+function enviarProduto(event) {
+  event.preventDefault();
+
+  const id = document.getElementById('id-prod').value;
+  const nome = document.getElementById('nome-prod').value;
+  const preco = document.getElementById('preco-prod').value;
+  const quantidade = document.getElementById('qtd-prod').value;
+  const img = document.getElementById('img-prod').value;
+  const categoria = document.getElementById('cat-prod').value;
+
+  fetch('/api/adicionar-produto', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, nome, preco, quantidade, img, categoria })
+    
+  })
+  
   .then(res => res.json())
   .then(data => {
-    if (data.logado) {
-    console.log('Usuário logado:', data.usuario.nome, '| Tipo:', data.usuario.tipo);
+    if (data.sucesso) {
+      alert('Produto adicionado com sucesso!');
+      // Atualizar a lista de produtos
+      carregarProdutos();
+      document.getElementById('form-produto').reset();
     } else {
-      console.log('Nenhum usuário logado.');
+      alert('Erro: ' + data.mensagem);
     }
- });
+  })
+  .catch(err => {
+    console.error('Erro ao enviar produto:', err);
+    alert('Erro ao salvar produto.');
+  });
+  
+}
 
 
