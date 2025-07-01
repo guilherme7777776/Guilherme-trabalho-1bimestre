@@ -128,3 +128,25 @@ app.post('/api/cadastrar', async (req, res) => {
     res.status(500).json({ sucesso: false, mensagem: 'Erro ao cadastrar.' });
   }
 });
+
+app.post('/api/adicionar-produto', async (req, res) => {
+  const { id, nome, preco, quantidade, img, categoria } = req.body;
+
+  if (!id || !nome || !preco || !quantidade || !img || !categoria) {
+    return res.status(400).json({ sucesso: false, mensagem: 'Todos os campos são obrigatórios' });
+  }
+
+  try {
+    const caminhoCSV = path.join(__dirname, 'dados_em_casa', 'backup.csv.csv');
+
+    // Linha no formato: id;nome;preco;quantidade;img;categoria
+    const novaLinha = `\n${id};${nome};${preco};${quantidade};${img};${categoria}`;
+    await fsPromises.appendFile(caminhoCSV, novaLinha, 'utf8');
+
+    res.json({ sucesso: true, mensagem: 'Produto adicionado com sucesso!' });
+  } catch (err) {
+    console.error('Erro ao adicionar produto:', err);
+    res.status(500).json({ sucesso: false, mensagem: 'Erro ao salvar produto.' });
+  }
+});
+
