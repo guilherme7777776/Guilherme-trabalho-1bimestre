@@ -1,68 +1,73 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Loja de Produtos</title>
-  <link rel="stylesheet" href="../css/index.css" />
-</head>
-<body>
+
+let dados = sessionStorage.getItem('dadosForm');
+let texto = document.getElementById("totalPreco")
+console.log(dados)
+let vazio = 0
+let produtos = JSON.parse(dados);
+console.log(produtos)
+if (dados) {
+  let produtosNoCarrinho = produtos.filter(produto => produto.qtd > 0);
   
-  <main>
-    <h1>Loja de Produtos</h1>
-    <input class="botao-fixo" type="button" value="Carrinho" onclick="littlecar()" />
-    <nav>
-      <button onclick="mostrar('album')">Vinil</button>
-      <button onclick="mostrar('camisa')">Camisas</button>
-      <button onclick="mostrar('ep')">EPS</button>
-    </nav>
+  const carrinhoElement = document.getElementById('carrinho');
+
+  if (produtosNoCarrinho.length > 0) {
+    let totalCompra = 0
     
-    <section id="home" class="pagina ativa">
-      <h2>Bem-vindo!</h2>
-      <p>Escolha uma categoria acima para navegar.</p>
-    </section>
-    <button id="botao-toggle-formulario" onclick="toggleFormulario()" style="font-size: 1.2rem;">➕ Adicionar Produto</button>
-      <section id="adicionar-produto" style="display: none; margin-top: 20px;">
-        <h2>Novo Produto</h2>
-        <form id="form-produto" onsubmit="enviarProduto(event)">
-          <label>ID: <input type="text" id="id-prod" required /></label><br />
-          <label>Nome: <input type="text" id="nome-prod" required /></label><br />
-          <label>Preço: <input type="number" step="0.01" id="preco-prod" required /></label><br />
-          <label>Quantidade: <input type="number" id="qtd-prod" required /></label><br />
-          <label>Imagem (ex: camisa1.jpg): <input type="text" id="img-prod" required /></label><br />
-          <label>Categoria:
-            <select id="cat-prod" required>
-              <option value="album">Vinil</option>
-              <option value="camisa">Camisa</option>
-              <option value="ep">EP</option>
-            </select>
-          </label><br /><br />
-          <button type="submit">Salvar Produto</button>
-        </form>
-      </section>
-    <section id="album" class="pagina">
-      <h2>Vinil</h2>
+    produtosNoCarrinho.forEach(produto => {
+      const itemCarrinho = document.createElement('div');
+      itemCarrinho.classList.add('produto');
       
-      <section>
-        <!-- Produtos da categoria album serão inseridos aqui pelo JS -->
-      </section>
-    </section>
+      const totalProduto = produto.preco * produto.qtd;
+      
+      totalCompra += totalProduto;
+      
+      itemCarrinho.innerHTML = `
+        <h3>${produto.nome}</h3>
+        <img src="${produto.imagem}" style="max-width: 150px; max-height: 150px;">
+        <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
+        <p>Quantidade: ${produto.qtd}</p>
+        <p>Total: R$ ${totalProduto.toFixed(2)}</p>
+      `;
 
-    <section id="camisa" class="pagina">
-      <h2>Camisas</h2>
-      <section>
-        <!-- Produtos da categoria camisa serão inseridos aqui pelo JS -->
-      </section>
-    </section>
+      carrinhoElement.appendChild(itemCarrinho);
+    });
 
-    <section id="ep" class="pagina">
-      <h2>EPS</h2>
-      <section>
-        <!-- Produtos da categoria ep serão inseridos aqui pelo JS -->
-      </section>
-    </section>
-  </main>
+    
+  
+    texto.textContent = `Total da Compra: R$ ${totalCompra.toFixed(2)}`;
+  
+    console.log(totalCompra, totalPreco);
 
-  <script src="../js/index.js"></script>
-</body>
-</html>
+  } else {
+    carrinhoElement.innerHTML = "<p>Seu carrinho está vazio.</p>";
+    vazio = 1
+  }
+
+} else {
+  alert('Nenhum produto encontrado no carrinho.');
+}
+
+function ir(){
+  sessionStorage.setItem('dadosForm', JSON.stringify(produtos));
+  window.location.href="index.html"
+}
+function querycode(){
+  if(vazio === 1){
+    alert("O carrinho está vazio")
+    return;
+  }else{
+    window.location.href = "qr.html"
+  }
+  
+}
+
+
+fetch('/api/usuario')
+  .then(res => res.json())
+  .then(data => {
+    if (data.logado) {
+    console.log('Usuário logado:', data.usuario.nome, '| Tipo:', data.usuario.tipo);
+    } else {
+      console.log('Nenhum usuário logado.');
+    }
+ });
