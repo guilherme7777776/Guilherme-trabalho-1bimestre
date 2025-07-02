@@ -23,7 +23,7 @@ if (dados) {
       
       itemCarrinho.innerHTML = `
         <h3>${produto.nome}</h3>
-        <img src="${produto.imagem}" style="max-width: 150px; max-height: 150px;">
+        <img src="${produto.img}" style="max-width: 150px; max-height: 150px;">
         <p>Preço: R$ ${produto.preco.toFixed(2)}</p>
         <p>Quantidade: ${produto.qtd}</p>
         <p>Total: R$ ${totalProduto.toFixed(2)}</p>

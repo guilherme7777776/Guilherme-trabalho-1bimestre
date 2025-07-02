@@ -132,7 +132,7 @@ app.post('/api/cadastrar', async (req, res) => {
 app.post('/api/adicionar-produto', async (req, res) => {
   const { id, nome, preco, quantidade, img, categoria } = req.body;
 
-  if (!id || !nome || !preco || !quantidade || !img || !categoria) {
+  if (!id || !nome || !preco || !img || !categoria) {
     return res.status(400).json({ sucesso: false, mensagem: 'Todos os campos são obrigatórios' });
   }
 

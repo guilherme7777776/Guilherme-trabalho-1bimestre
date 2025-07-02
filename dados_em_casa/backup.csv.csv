@@ -1,5 +1,5 @@
-id;nome;preco;quantidade;img;categoria
-1;Rust in Peace - Megadeth;45;0;rust_in_peace.jpg;album
+id;nome;preco;qtd;img;categoria
+1;Rust in Peas - Megadeth;45;0;rust_in_peace.jpg;album
 2;Pássaro de fogo - Paula Fernandes;65;0;passaro_de_fogo.jpg;album
 3;Weezer(blue album) - Weezer;58;0;weezer_blue_album.jpg;album
 4;Vida - Padre Fabio de Melo;70;0;vida.jpg;album

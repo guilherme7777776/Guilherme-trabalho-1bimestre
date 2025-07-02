@@ -45,14 +45,15 @@ function criarElementoProduto(prod) {
       </div>
       <div class="quantidade-container">
         <button class="botao-adicionar" onclick="alterarQuantidade('${prod.id}', -1)">-</button>
-        <span id="${prod.id}" class="quantidade">0</span>
+        <span id="${prod.id}" class="quantidade">${prod.qtd}</span>
         <button class="botao-adicionar" onclick="alterarQuantidade('${prod.id}', 1)">+</button>
       </div>
     `;
   
     return artigo;
 }
-  
+
+
 function urlSemCache(url) {
   const separador = url.includes('?') ? '&' : '?';
   return url + separador + '_=' + new Date().getTime();
@@ -62,29 +63,28 @@ function urlSemCache(url) {
 async function carregarProdutos() {
     try {
       const resposta = await fetch(urlSemCache('/api/produtos')); 
-      const dados = await resposta.json();
+      let dados = await resposta.json();
       const listabruta = sessionStorage.getItem('dadosForm');
+      sessionStorage.removeItem('dadosForm');
       let lista = JSON.parse(listabruta);
+      
       if (lista){
-        listaproduto = lista.map(prod => new produto(
-          prod.id,
-          prod.nome,
-          prod.preco,
-          prod.quantidade,
-          prod.img,
-          prod.categoria.toLowerCase()
-        ));
-        console.log(lista);
-      }else{
-        listaproduto = dados.map(prod => new produto(
-          prod.id,
-          prod.nome,
-          prod.preco,
-          prod.quantidade,
-          prod.img,
-          prod.categoria.toLowerCase()
-        ));
+        for(i = 0; i<lista.length; i++){
+          dados[i].qtd = lista[i].qtd
+        }
+        console.log(dados);
       }
+      console.log(dados);
+      listaproduto = dados.map(prod => new produto(
+        prod.id,
+        prod.nome,
+        prod.preco,
+        prod.qtd,
+        prod.img,
+        prod.categoria.toLowerCase()
+      ));
+      
+      
       
   
       const categorias = {};
@@ -192,10 +192,15 @@ function enviarProduto(event) {
   const id = document.getElementById('id-prod').value;
   const nome = document.getElementById('nome-prod').value;
   const preco = document.getElementById('preco-prod').value;
-  const quantidade = document.getElementById('qtd-prod').value;
+  let quantidade = 0
   const img = document.getElementById('img-prod').value;
   const categoria = document.getElementById('cat-prod').value;
-
+  for(i = 0; i<listaproduto.length; i++){
+    if(listaproduto[i].id === id){
+      alert('id ja existente');
+      return;
+    }
+  }
   fetch('/api/adicionar-produto', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -222,3 +227,7 @@ function enviarProduto(event) {
 }
 
 
+function urlSemCache(url) {
+  const separador = url.includes('?') ? '&' : '?';
+  return url + separador + '_=' + new Date().getTime();
+}
