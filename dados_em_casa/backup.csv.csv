@@ -1,5 +1,5 @@
 id;nome;preco;qtd;img;categoria
-1;Rust in Peas - Megadeth;45;0;rust_in_peace.jpg;album
+1;Rust in piss - Megadeth;45;0;rust_in_peace.jpg;album
 2;Pássaro de fogo - Paula Fernandes;65;0;passaro_de_fogo.jpg;album
 3;Weezer(blue album) - Weezer;58;0;weezer_blue_album.jpg;album
 4;Vida - Padre Fabio de Melo;70;0;vida.jpg;album
@@ -11,10 +11,10 @@ id;nome;preco;qtd;img;categoria
 10;Michael Jackson - Thriller;90;0;thriller.jpg;album
 11;Camisa da banda Xavlegbmaofffassssitimiwoamndutroabcwapwaeiippohfffx;39;0;camisa_xavleg.jpg;camisa
 12;Camisa Megadeth - Piss Sells;42;0;camisa_megadeth.jpg;camisa
-13;Camisa do Santos;37;0;camisa_santos.jpg;camisa
+13;Camisa do Santos;37;0;camisa_nsantos.jpg;camisa
 14;Camisa Mustaine Wrote 'Em All;45;0;camisa_mustaine.jpg;camisa
 15;Camisa Beatles;50;0;camisa_beatles.jpg;camisa
-16;Blew - Nirvana;85;0;blew.jpg;EP
-17;Seven Inches of Satanic Panic - Ghost;666;0;seven_inches_ghost.jpg;EP
-18;Iron Lung - Radiohead;90;0;iron_lung.jpg;EP
-19;Helloween - Helloween;90;0;helloween.jpg;EP
+16;Blew - Nirvana;85;0;blew.jpg;ep
+17;Seven Inches of Satanic Panic - Ghost;666;0;seven_inches_ghost.jpg;ep
+18;Iron Lung - Radiohead;90;0;iron_lung.jpg;ep
+19;Helloween - Helloween;90;0;helloween.jpg;ep

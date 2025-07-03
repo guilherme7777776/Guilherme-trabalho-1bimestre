@@ -48,6 +48,10 @@ function criarElementoProduto(prod) {
         <span id="${prod.id}" class="quantidade">${prod.qtd}</span>
         <button class="botao-adicionar" onclick="alterarQuantidade('${prod.id}', 1)">+</button>
       </div>
+      <div class="acoes-produto">
+      <button onclick="editarProduto('${prod.id}')">Editar</button>
+      <button onclick="apagarProduto('${prod.id}')">Apagar</button>
+      </div>
     `;
   
     return artigo;
@@ -63,25 +67,28 @@ function urlSemCache(url) {
 async function carregarProdutos() {
     try {
       const resposta = await fetch(urlSemCache('/api/produtos')); 
+      console.log(resposta)
       let dados = await resposta.json();
       const listabruta = sessionStorage.getItem('dadosForm');
       sessionStorage.removeItem('dadosForm');
       let lista = JSON.parse(listabruta);
-      
+      console.log(dados);
+      console.log("a");
       if (lista){
         for(i = 0; i<lista.length; i++){
           dados[i].qtd = lista[i].qtd
         }
-        console.log(dados);
+        
       }
-      console.log(dados);
+
+
       listaproduto = dados.map(prod => new produto(
         prod.id,
         prod.nome,
         prod.preco,
         prod.qtd,
         prod.img,
-        prod.categoria.toLowerCase()
+        prod.categoria
       ));
       
       
@@ -179,55 +186,172 @@ function toggleFormulario() {
 
   if (secao.style.display === 'none') {
     secao.style.display = 'block';
-    botao.textContent = '✖️ Fechar';
+    botao.textContent = 'Fechar';
   } else {
     secao.style.display = 'none';
-    botao.textContent = '➕ Adicionar Produto';
+    botao.textContent = 'Adicionar Produto';
+  }
+}
+
+
+function enviarProduto(event) {
+  event.preventDefault();
+
+  let id = 0
+  for(let i = 0; i<listaproduto.length; i++){
+    id = listaproduto[i].id
+  }
+  id++
+  const nome = document.getElementById('nome-prod').value;
+  const preco = document.getElementById('preco-prod').value;
+  let qtd = 0;
+  const categoria = document.getElementById('cat-prod').value;
+
+  // Usa o nome da imagem do preview
+  const img = nomeImagemSelecionada ? `imagens/${nomeImagemSelecionada}` : 'imagens/default.png';
+
+  fetch('/api/adicionar-produto', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, nome, preco, qtd, img, categoria })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.sucesso) {
+      alert('Produto adicionado com sucesso!');
+      carregarProdutos();
+
+      // Limpa o formulário e preview
+      document.getElementById('form-produto').reset();
+      document.getElementById('preview-img').src = 'imagens/default.png';
+      nomeImagemSelecionada = '';
+    } else {
+      alert('Erro: ' + data.mensagem);
+    }
+  })
+  .catch(err => {
+    console.error('Erro ao salvar produto:', err);
+    alert('Erro ao salvar produto.');
+  });
+}
+
+
+
+function urlSemCache(url) {
+  const separador = url.includes('?') ? '&' : '?';
+  return url + separador + '_=' + new Date().getTime();
+}
+
+let nomeImagemSelecionada = ''; // global para armazenar o nome
+
+function previewImagem(event) {
+  const input = event.target;
+  const img = document.getElementById('preview-img');
+
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(input.files[0]);
   }
 }
 
 function enviarProduto(event) {
   event.preventDefault();
 
-  const id = document.getElementById('id-prod').value;
+  const form = document.getElementById('form-produto');
+  const editId = form.getAttribute('data-edit-id');
+
   const nome = document.getElementById('nome-prod').value;
-  const preco = document.getElementById('preco-prod').value;
-  let quantidade = 0
-  const img = document.getElementById('img-prod').value;
+  const preco = parseFloat(document.getElementById('preco-prod').value);
   const categoria = document.getElementById('cat-prod').value;
-  for(i = 0; i<listaproduto.length; i++){
-    if(listaproduto[i].id === id){
-      alert('id ja existente');
-      return;
+
+  if (editId) {
+    // Edição: atualiza produto local
+    const prodIndex = listaproduto.findIndex(p => p.id == editId);
+    if (prodIndex !== -1) {
+      listaproduto[prodIndex].nome = nome;
+      listaproduto[prodIndex].preco = preco;
+      listaproduto[prodIndex].categoria = categoria;
+      // imagem NÃO muda aqui
     }
+
+    alert('Produto editado com sucesso!');
+    form.removeAttribute('data-edit-id');
+
+    // Se quiser, aqui pode chamar API para atualizar backend
+
+  } else {
+    // Criação do produto
+    let novoId = listaproduto.length ? (parseInt(listaproduto[listaproduto.length - 1].id) + 1).toString() : '1';
+    const imgPadrao = 'imagens/default.png'; // ou outra imagem padrão que quiser
+
+    const novoProduto = new produto(novoId, nome, preco, 0, imgPadrao, categoria);
+    listaproduto.push(novoProduto);
+
+    alert('Produto adicionado com sucesso!');
+    // Se quiser, chamar API para adicionar backend
   }
-  fetch('/api/adicionar-produto', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, nome, preco, quantidade, img, categoria })
-    
-  })
-  
-  .then(res => res.json())
-  .then(data => {
-    if (data.sucesso) {
-      alert('Produto adicionado com sucesso!');
-      // Atualizar a lista de produtos
-      carregarProdutos();
-      document.getElementById('form-produto').reset();
-    } else {
-      alert('Erro: ' + data.mensagem);
-    }
-  })
-  .catch(err => {
-    console.error('Erro ao enviar produto:', err);
-    alert('Erro ao salvar produto.');
-  });
-  
+
+  form.reset();
+  document.getElementById('preview-img').src = 'imagens/default.png';
+  toggleFormulario();
+  carregarProdutos();
 }
 
 
-function urlSemCache(url) {
-  const separador = url.includes('?') ? '&' : '?';
-  return url + separador + '_=' + new Date().getTime();
+
+
+
+fetch('/api/usuario')
+  .then(res => res.json())
+  .then(data => {
+    if (data.logado && data.usuario.tipo === 'admin') {
+      // Mostra o botão só para admin
+      document.getElementById('botao-toggle-formulario').style.display = 'inline-block';
+    }
+  })
+  .catch(err => {
+    console.error('Erro ao verificar usuário:', err);
+  });
+
+
+  // Função para preencher o formulário com os dados do produto para edição
+function editarProduto(id) {
+  const prod = listaproduto.find(p => p.id == id);
+  if (!prod) return alert('Produto não encontrado!');
+
+  toggleFormulario(); // Abre o formulário
+
+  document.getElementById('nome-prod').value = prod.nome;
+  document.getElementById('preco-prod').value = prod.preco;
+  document.getElementById('cat-prod').value = prod.categoria;
+
+  // NÃO alteramos o preview da imagem, só mantém a que já estava
+  // Ou opcionalmente podemos deixar o preview fixo, sem mexer
+  console.log(listaproduto);
+  console.log("bolod eecenoura");
+
+  // Marca que está editando esse produto
+  document.getElementById('form-produto').setAttribute('data-edit-id', id);
+}
+
+// Função para apagar produto
+function apagarProduto(id) {
+  if (!confirm('Tem certeza que deseja apagar este produto?')) return;
+
+  // Remove o produto do array
+  listaproduto = listaproduto.filter(p => p.id != id);
+
+  // Recalcula os IDs para ficarem sequenciais (id-1, id-2, ...)
+  listaproduto.forEach((prod, index) => {
+    prod.id = (index + 1).toString();
+  });
+
+  // Atualiza a tela
+  carregarProdutos();
+
+  // Opcional: atualizar o backend com os produtos atualizados
+  // Aqui você pode fazer um fetch para enviar a lista atualizada
 }
