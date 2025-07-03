@@ -23,24 +23,24 @@
     </section>
     <button id="botao-toggle-formulario" onclick="toggleFormulario()" style="display: none;">➕ Adicionar Produto</button>
     <section id="adicionar-produto" style="display: none; margin-top: 20px;">
-      <form id="form-produto" onsubmit="enviarProduto(event)" class="produto adicionar-produto">
-        <label for="img-prod" class="imagem-produto-preview">
-          <img src="imagens/default.png" id="preview-img" alt="Imagem">
+      <form id="form-produto" onsubmit="enviarProduto(event)" class="produto adicionar-produto" enctype="multipart/form-data">
+        <label for="img-prod" class="imagem-produto-preview" style="cursor: pointer;">
+          <img src="imagens/default.png" id="preview-img" alt="Imagem" style="max-width: 150px;">
         </label>
-        <input type="file" id="img-prod" accept="image/*" style="display: none;" onchange="previewImagem(event)">
-
+        <input type="file" id="img-prod" name="imagem" accept="image/*" style="display: none;" onchange="previewImagem(event)">
+    
         <div class="texto">
-          <input type="text" id="nome-prod" placeholder="Nome do Produto" required>
-          <input type="number" id="preco-prod" placeholder="Preço (R$)" required>
+          <input type="text" id="nome-prod" name="nome" placeholder="Nome do Produto" required>
+          <input type="number" id="preco-prod" name="preco" placeholder="Preço (R$)" required step="0.01">
           <label>Categoria:
-            <select id="cat-prod" required>
+            <select id="cat-prod" name="categoria" required>
               <option value="album">Vinil</option>
               <option value="camisa">Camisa</option>
               <option value="ep">EP</option>
             </select>
           </label>
         </div>
-
+    
         <div class="quantidade-container">
           <button type="submit" class="botao-adicionar salvar">Salvar</button>
         </div>
