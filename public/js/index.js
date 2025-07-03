@@ -67,19 +67,20 @@ function urlSemCache(url) {
 async function carregarProdutos() {
     try {
       const resposta = await fetch(urlSemCache('/api/produtos')); 
-      console.log(resposta)
       let dados = await resposta.json();
       const listabruta = sessionStorage.getItem('dadosForm');
+      console.log(listabruta);
       sessionStorage.removeItem('dadosForm');
       let lista = JSON.parse(listabruta);
-      console.log(dados);
-      console.log("a");
-      if (lista){
-        for(i = 0; i<lista.length; i++){
-          dados[i].qtd = lista[i].qtd
-        }
-        
+      if (lista) {
+        dados.forEach(prod => {
+          const correspondente = lista.find(p => p.id == prod.id);
+          if (correspondente) {
+            prod.qtd = correspondente.qtd;
+          }
+        });
       }
+      
 
 
       listaproduto = dados.map(prod => new produto(
@@ -194,46 +195,6 @@ function toggleFormulario() {
 }
 
 
-function enviarProduto(event) {
-  event.preventDefault();
-
-  let id = 0
-  for(let i = 0; i<listaproduto.length; i++){
-    id = listaproduto[i].id
-  }
-  id++
-  const nome = document.getElementById('nome-prod').value;
-  const preco = document.getElementById('preco-prod').value;
-  let qtd = 0;
-  const categoria = document.getElementById('cat-prod').value;
-
-  // Usa o nome da imagem do preview
-  const img = nomeImagemSelecionada ? `imagens/${nomeImagemSelecionada}` : 'imagens/default.png';
-
-  fetch('/api/adicionar-produto', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, nome, preco, qtd, img, categoria })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.sucesso) {
-      alert('Produto adicionado com sucesso!');
-      carregarProdutos();
-
-      // Limpa o formulário e preview
-      document.getElementById('form-produto').reset();
-      document.getElementById('preview-img').src = 'imagens/default.png';
-      nomeImagemSelecionada = '';
-    } else {
-      alert('Erro: ' + data.mensagem);
-    }
-  })
-  .catch(err => {
-    console.error('Erro ao salvar produto:', err);
-    alert('Erro ao salvar produto.');
-  });
-}
 
 
 
@@ -249,109 +210,137 @@ function previewImagem(event) {
   const img = document.getElementById('preview-img');
 
   if (input.files && input.files[0]) {
+    const file = input.files[0];
+    nomeImagemSelecionada = file.name; // salva o nome do arquivo globalmente
+    
     const reader = new FileReader();
     reader.onload = () => {
       img.src = reader.result;
     };
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
   }
 }
 
-function enviarProduto(event) {
-  event.preventDefault();
-
-  const form = document.getElementById('form-produto');
-  const editId = form.getAttribute('data-edit-id');
-
-  const nome = document.getElementById('nome-prod').value;
-  const preco = parseFloat(document.getElementById('preco-prod').value);
-  const categoria = document.getElementById('cat-prod').value;
-
-  if (editId) {
-    // Edição: atualiza produto local
-    const prodIndex = listaproduto.findIndex(p => p.id == editId);
-    if (prodIndex !== -1) {
-      listaproduto[prodIndex].nome = nome;
-      listaproduto[prodIndex].preco = preco;
-      listaproduto[prodIndex].categoria = categoria;
-      // imagem NÃO muda aqui
-    }
-
-    alert('Produto editado com sucesso!');
-    form.removeAttribute('data-edit-id');
-
-    // Se quiser, aqui pode chamar API para atualizar backend
-
-  } else {
-    // Criação do produto
-    let novoId = listaproduto.length ? (parseInt(listaproduto[listaproduto.length - 1].id) + 1).toString() : '1';
-    const imgPadrao = 'imagens/default.png'; // ou outra imagem padrão que quiser
-
-    const novoProduto = new produto(novoId, nome, preco, 0, imgPadrao, categoria);
-    listaproduto.push(novoProduto);
-
-    alert('Produto adicionado com sucesso!');
-    // Se quiser, chamar API para adicionar backend
-  }
-
-  form.reset();
-  document.getElementById('preview-img').src = 'imagens/default.png';
-  toggleFormulario();
-  carregarProdutos();
-}
 
 
 
 
 
 fetch('/api/usuario')
+.then(res => res.json())
+.then(data => {
+  if (data.logado && data.usuario.tipo === 'admin') {
+    // Mostra o botão só para admin
+    document.getElementById('botao-toggle-formulario').style.display = 'inline-block';
+  }
+})
+.catch(err => {
+  console.error('Erro ao verificar usuário:', err);
+});
+
+
+
+
+// Função para apagar produto
+async function apagarProduto(id) {
+  if (!confirm('Tem certeza que deseja apagar este produto?')) return;
+
+  try {
+    const res = await fetch('/api/apagar-produto', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    });
+
+    const data = await res.json();
+
+    if (data.sucesso) {
+      alert('Produto apagado com sucesso!');
+      await carregarProdutos(); // <-- força a tela a recarregar com o novo CSV
+    } else {
+      alert('Erro: ' + data.mensagem);
+    }
+  } catch (err) {
+    console.error('Erro ao apagar produto:', err);
+    alert('Erro de conexão com o servidor.');
+  }
+}
+
+
+function enviarProduto(event) {
+  event.preventDefault();
+
+  const form = document.getElementById('form-produto');
+
+  // Cria um objeto FormData e adiciona todos os campos do form automaticamente
+  const formData = new FormData(form);
+  formData.set('qtd', '0');
+
+  // Se você tem o id para edição, adicione manualmente (se precisar)
+  const editId = form.getAttribute('data-edit-id');
+  if (editId) {
+    formData.append('id', editId);
+  } else {
+    // Se for adicionar novo produto, pode gerar um id, por exemplo:
+    formData.append('id', gerarNovoId());
+  }
+
+  fetch(editId ? '/api/editar-produto' : '/api/adicionar-produto', {
+    method: 'POST',
+    body: formData, // Aqui manda o formData diretamente, sem headers, para o fetch colocar o Content-Type correto automaticamente
+  })
   .then(res => res.json())
   .then(data => {
-    if (data.logado && data.usuario.tipo === 'admin') {
-      // Mostra o botão só para admin
-      document.getElementById('botao-toggle-formulario').style.display = 'inline-block';
+    if (data.sucesso) {
+      alert(`Produto ${editId ? 'editado' : 'adicionado'} com sucesso!`);
+
+      // Atualiza a tela e fecha o formulário
+      carregarProdutos();
+      form.reset();
+      form.removeAttribute('data-edit-id');
+      document.getElementById('preview-img').src = 'imagens/default.png';
+      toggleFormulario();
+    } else {
+      alert('Erro: ' + data.mensagem);
     }
   })
   .catch(err => {
-    console.error('Erro ao verificar usuário:', err);
+    console.error('Erro ao salvar produto:', err);
+    alert('Erro ao salvar produto.');
   });
+}
 
 
-  // Função para preencher o formulário com os dados do produto para edição
+// Gera um novo ID com base no último ID da lista
+function gerarNovoId() {
+  let maiorId = 0;
+  for (let i = 0; i < listaproduto.length; i++) {
+    const idNum = parseInt(listaproduto[i].id);
+    if (!isNaN(idNum) && idNum > maiorId) {
+      maiorId = idNum;
+    }
+  }
+  return (maiorId + 1).toString();
+}
+
+
 function editarProduto(id) {
   const prod = listaproduto.find(p => p.id == id);
   if (!prod) return alert('Produto não encontrado!');
 
-  toggleFormulario(); // Abre o formulário
+  toggleFormulario();
 
   document.getElementById('nome-prod').value = prod.nome;
   document.getElementById('preco-prod').value = prod.preco;
   document.getElementById('cat-prod').value = prod.categoria;
 
-  // NÃO alteramos o preview da imagem, só mantém a que já estava
-  // Ou opcionalmente podemos deixar o preview fixo, sem mexer
-  console.log(listaproduto);
-  console.log("bolod eecenoura");
-
-  // Marca que está editando esse produto
-  document.getElementById('form-produto').setAttribute('data-edit-id', id);
+  // Deixa a imagem atual visível no preview
+  document.getElementById('preview-img').src = prod.img;
+  nomeImagemSelecionada = prod.img.replace('imagens/', '');
+  console.log(listaproduto)
+  // Marca que estamos editando esse ID
+  document.getElementById('form-produto').setAttribute('data-edit-id', prod.id);
 }
 
-// Função para apagar produto
-function apagarProduto(id) {
-  if (!confirm('Tem certeza que deseja apagar este produto?')) return;
 
-  // Remove o produto do array
-  listaproduto = listaproduto.filter(p => p.id != id);
 
-  // Recalcula os IDs para ficarem sequenciais (id-1, id-2, ...)
-  listaproduto.forEach((prod, index) => {
-    prod.id = (index + 1).toString();
-  });
-
-  // Atualiza a tela
-  carregarProdutos();
-
-  // Opcional: atualizar o backend com os produtos atualizados
-  // Aqui você pode fazer um fetch para enviar a lista atualizada
-}
