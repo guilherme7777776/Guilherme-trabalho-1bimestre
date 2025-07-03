@@ -6,6 +6,21 @@ const path = require('path');
 const fsPromises = require('fs/promises');
 const app = express();
 const PORT = 3000;
+const multer = require('multer');
+
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'public', 'imagens'));
+  },
+  filename: function (req, file, cb) {
+    // Pode usar o nome original do arquivo ou criar um nome único
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
 
 // Middlewares
 app.use(express.json());
@@ -65,7 +80,7 @@ app.post('/api/login', async (req, res) => {
     const usuarios = await lerCSV(caminhoUsuarios);
     
     const user = usuarios.find(u => u.nome === usuario && u.senha === senha);
-    console.log(user);
+    
     if (user) {
       req.session.usuario = {
         nome: user.nome,
@@ -132,7 +147,6 @@ app.post('/api/cadastrar', async (req, res) => {
 
 app.post('/api/adicionar-produto', async (req, res) => {
   const { id, nome, preco, qtd, img, categoria } = req.body;
-
   if (!nome || !preco || !img || !categoria) {
     return res.status(400).json({ sucesso: false, mensagem: 'Todos os campos são obrigatórios' });
   }
@@ -153,7 +167,6 @@ app.post('/api/adicionar-produto', async (req, res) => {
 
 
 
-
 const salvarCSV = async (caminho, dados) => {
   const cabecalho = 'id;nome;preco;qtd;img;categoria\n';
 
@@ -167,25 +180,42 @@ const salvarCSV = async (caminho, dados) => {
 };
 
 
-app.post('/api/editar-produto', async (req, res) => {
-  const { id, nome, preco, qtd, img, categoria } = req.body;
-
-  if (!id || !nome || !preco || !img || !categoria) {
-    return res.status(400).json({ sucesso: false, mensagem: 'Todos os campos são obrigatórios' });
-  }
-
+// Editar produto
+app.post('/api/editar-produto', upload.single('imagem'), async (req, res) => {
   try {
+    const { id, nome, preco, qtd, categoria } = req.body;
+
+    if (!id || !nome || !preco || !categoria) {
+      return res.status(400).json({ sucesso: false, mensagem: 'Todos os campos são obrigatórios' });
+    }
+
     const caminhoCSV = path.join(__dirname, 'dados_em_casa', 'backup.csv.csv');
     let produtos = await lerCSV(caminhoCSV);
-    console.log(produtos)
+
     const index = produtos.findIndex(prod => prod.id == id);
     if (index === -1) {
       return res.status(404).json({ sucesso: false, mensagem: 'Produto não encontrado' });
     }
 
-    produtos[index] = { id, nome, preco, qtd, img, categoria };
+    let imgNome = produtos[index].img; // default atual
 
-    // Aqui você chama salvarCSV com os dados atualizados
+    if (req.file) {
+      // Nova imagem enviada, usa essa
+      imgNome = req.file.filename;
+    } else if (req.body.img) {
+      // mantém imagem existente
+      imgNome = req.body.img;
+    }
+
+    produtos[index] = { 
+      id, 
+      nome, 
+      preco, 
+      qtd, 
+      img: imgNome, 
+      categoria 
+    };
+
     await salvarCSV(caminhoCSV, produtos);
 
     res.json({ sucesso: true, mensagem: 'Produto editado com sucesso!' });
@@ -205,23 +235,18 @@ app.post('/api/apagar-produto', async (req, res) => {
 
   try {
     const caminhoCSV = path.join(__dirname, 'dados_em_casa', 'backup.csv.csv');
-
-    // Lê todos os produtos
     let produtos = await lerCSV(caminhoCSV);
 
-    // Remove o produto pelo id
+    // Remover o produto
     produtos = produtos.filter(prod => prod.id != id);
 
-    // Reatribui ids sequenciais a partir de 1 (opcional)
-    produtos.forEach((prod, i) => {
-      prod.id = (i + 1).toString();
+    // Normalizar os campos e reordenar IDs
+    const cabecalho = 'id;nome;preco;qtd;img;categoria\n';
+    const linhas = produtos.map((prod, i) => {
+      return `${i + 1};${prod.nome};${prod.preco};${prod.qtd};${prod.img.replace(/^\/?imagens\//, '')};${prod.categoria}`;
     });
 
-    // Recria o conteúdo do CSV (com cabeçalho)
-    const cabecalho = 'id;nome;preco;qtd;img;categoria\n';
-    const linhas = produtos.map(p => `${p.id};${p.nome};${p.preco};${p.qtd};${p.img};${p.categoria}`);
-
-    // Sobrescreve o CSV inteiro
+    // Salvar no CSV
     await fsPromises.writeFile(caminhoCSV, cabecalho + linhas.join('\n'), 'utf8');
 
     res.json({ sucesso: true, mensagem: 'Produto apagado com sucesso!' });
@@ -230,3 +255,8 @@ app.post('/api/apagar-produto', async (req, res) => {
     res.status(500).json({ sucesso: false, mensagem: 'Erro ao apagar produto.' });
   }
 });
+
+
+
+// Configuração do multer para salvar imagens na pasta public/imagens
+
