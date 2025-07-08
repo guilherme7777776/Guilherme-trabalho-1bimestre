@@ -1,4 +1,5 @@
 let levarParaCarrinho = sessionStorage.getItem('haveralogin');
+console.log(levarParaCarrinho);
 async function logar() {
   const nome = document.getElementById("idnome").value;
   const senha = document.getElementById("idsenha").value;
@@ -13,7 +14,7 @@ async function logar() {
   console.log(resultado);
   if (resultado.sucesso) {
     alert("Parabéns, login realizado com sucesso!");
-    if(levarParaCarrinho = 1){
+    if(levarParaCarrinho == 1){
       sessionStorage.removeItem("haveralogin")
       window.location.href = "carrinho.html"; // Redireciona para a loja
     }else{

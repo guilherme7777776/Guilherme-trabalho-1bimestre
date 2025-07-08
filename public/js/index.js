@@ -9,6 +9,23 @@ class produto {
       this.categoria = categoria;
     }
 }
+
+console.log(document.getElementById("botao-logar"));
+window.addEventListener('DOMContentLoaded', () => {
+  fetch('/api/usuario')
+    .then(res => res.json())
+    .then(data => {
+      // Lógica se o usuário estiver logado 
+      if (!data.logado) {
+        document.getElementById("botao-logar").style.display = 'inline-block';
+      }
+    })
+    .catch(erro => {
+      // Exibe o botão se houver erro (ex: não logado ou erro no servidor)
+      document.getElementById("botao-logar").style.display = 'inline-block';
+    });
+});
+
 //verificar o usuario pra mudar os botao
 fetch('/api/usuario')
 .then(res => res.json())

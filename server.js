@@ -263,11 +263,13 @@ app.post('/api/apagar-produto', async (req, res) => {
 
 const csvPath = path.join(__dirname, 'dados_em_casa', 'backup.csv.csv');
 
-// GET: Ler usuários do CSV e enviar como JSON
+const csvPathUsuarios = path.join(__dirname, 'dados_em_casa', 'usuarios.csv');
+
+// GET para ler usuários (adaptado para `;`)
 app.get('/api/usuarios', (req, res) => {
   const usuarios = [];
-  fs.createReadStream(csvPath)
-    .pipe(csv())
+  fs.createReadStream(csvPathUsuarios)
+    .pipe(csv({ separator: ';' }))  // use separador correto
     .on('data', (row) => usuarios.push(row))
     .on('end', () => {
       res.json(usuarios);
@@ -278,7 +280,7 @@ app.get('/api/usuarios', (req, res) => {
     });
 });
 
-// POST: Recebe lista de usuários e regrava CSV
+// POST para salvar os usuários editados (usando `;`)
 app.post('/api/usuarios', async (req, res) => {
   const usuarios = req.body;
   if (!Array.isArray(usuarios)) {
@@ -286,27 +288,21 @@ app.post('/api/usuarios', async (req, res) => {
   }
 
   try {
-    // Montar CSV manualmente
-    const linhas = ['nome,senha,tipo']; // cabeçalho
+    const caminhoCSV = path.join(__dirname, 'dados_em_casa', 'usuarios.csv'); // ajuste aqui se preciso
+
+    const linhas = ['nome;senha;tipo']; // cabeçalho CSV com ponto-e-vírgula
+
     usuarios.forEach(u => {
-      // Escapar vírgulas e aspas se precisar, simples exemplo:
-      const nome = `"${(u.nome || '').replace(/"/g, '""')}"`;
-      const senha = `"${(u.senha || '').replace(/"/g, '""')}"`;
-      const tipo = `"${(u.tipo || '').replace(/"/g, '""')}"`;
-      linhas.push([nome, senha, tipo].join(','));
+      linhas.push(`${u.nome};${u.senha};${u.tipo}`);
     });
+
     const csvConteudo = linhas.join('\n');
 
-    // Salvar arquivo
-    await fsPromises.writeFile(csvPath, csvConteudo, 'utf8');
+    await fsPromises.writeFile(caminhoCSV, csvConteudo, 'utf8');
 
     res.json({ sucesso: true });
   } catch (err) {
     console.error('Erro ao salvar CSV:', err);
     res.status(500).json({ erro: 'Erro ao salvar usuários' });
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
 });
