@@ -12,7 +12,6 @@ async function carregarUsuarios() {
     alert('Erro ao carregar usuários, veja o console.');
   }
 }
-
 function renderizarTabela() {
   const tbody = document.querySelector('#tabela-usuarios tbody');
   tbody.innerHTML = '';
@@ -20,25 +19,17 @@ function renderizarTabela() {
   usuarios.forEach((u, idx) => {
     const tr = document.createElement('tr');
 
-    // Nome
+    // Nome (texto fixo, sem input)
     const tdNome = document.createElement('td');
-    const inputNome = document.createElement('input');
-    inputNome.type = 'text';
-    inputNome.value = u.nome || '';
-    inputNome.addEventListener('input', e => usuarios[idx].nome = e.target.value);
-    tdNome.appendChild(inputNome);
+    tdNome.textContent = u.nome || '';
     tr.appendChild(tdNome);
 
-    // Senha
+    // Senha (texto fixo, sem input)
     const tdSenha = document.createElement('td');
-    const inputSenha = document.createElement('input');
-    inputSenha.type = 'text';
-    inputSenha.value = u.senha || '';
-    inputSenha.addEventListener('input', e => usuarios[idx].senha = e.target.value);
-    tdSenha.appendChild(inputSenha);
+    tdSenha.textContent = u.senha || '';
     tr.appendChild(tdSenha);
 
-    // Tipo
+    // Tipo (ainda editável via select)
     const tdTipo = document.createElement('td');
     const selectTipo = document.createElement('select');
     ['admin', 'cliente'].forEach(tipo => {
@@ -52,7 +43,7 @@ function renderizarTabela() {
     tdTipo.appendChild(selectTipo);
     tr.appendChild(tdTipo);
 
-    // Ações
+    // Ações (botão remover)
     const tdAcoes = document.createElement('td');
     const btnRemover = document.createElement('button');
     btnRemover.textContent = 'Remover';
@@ -66,6 +57,7 @@ function renderizarTabela() {
     tbody.appendChild(tr);
   });
 }
+
 
 async function salvarUsuarios() {
   try {
@@ -92,8 +84,6 @@ async function salvarUsuarios() {
 }
 
 function adicionarUsuario() {
-  usuarios.push({ nome: '', senha: '', tipo: 'cliente' });
-  renderizarTabela();
 }
 
 document.getElementById('btn-salvar').addEventListener('click', salvarUsuarios);
