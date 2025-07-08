@@ -171,10 +171,10 @@ app.post('/api/adicionar-produto', upload.single('imagem'), async (req, res) => 
 const salvarCSV = async (caminho, dados) => {
   const cabecalho = 'id;nome;preco;qtd;img;categoria\n';
 
-  const linhas = dados.map(prod =>
-    `${prod.id};${prod.nome};${prod.preco};${prod.qtd};${prod.img.replace('/^\/?imagens\//, ')};${prod.categoria}`
-  );
-
+  const linhas = dados.map(prod => {
+    const imgNome = (prod.img || '').replace(/^\/?imagens\//, ''); // blindagem segura
+    return `${prod.id};${prod.nome};${prod.preco};${prod.qtd};${imgNome};${prod.categoria}`;
+  });
   const conteudo = cabecalho + linhas.join('\n');
 
   await fsPromises.writeFile(caminho, conteudo, 'utf8');
@@ -261,7 +261,7 @@ app.post('/api/apagar-produto', async (req, res) => {
 
 
 
-const csvPath = path.join(__dirname, 'dados_em_casa', 'backup.csv.csv');
+
 
 const csvPathUsuarios = path.join(__dirname, 'dados_em_casa', 'usuarios.csv');
 
@@ -301,6 +301,11 @@ app.post('/api/usuarios', async (req, res) => {
     await fsPromises.writeFile(caminhoCSV, csvConteudo, 'utf8');
 
     res.json({ sucesso: true });
+  } catch (err) {
+    console.error('Erro ao salvar CSV:', err);
+    res.status(500).json({ erro: 'Erro ao salvar usuários' });
+  }
+});
   } catch (err) {
     console.error('Erro ao salvar CSV:', err);
     res.status(500).json({ erro: 'Erro ao salvar usuários' });
