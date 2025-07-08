@@ -1,20 +1,30 @@
 id;nome;preco;qtd;img;categoria
-1;In the court of the crimson king - King crimson;45;0;1751554071614-crimson.jpg;album
-2;Pássaro de fogo - Paula Fernandes;65;0;1751554239678-crimson.jpg;album
-3;Weezer(blue album) - Weezer;58;0;weezer_blue_album.jpg;album
-4;Vida - Padre Fabio de Melo;70;0;vida.jpg;album
-5;Black Clouds & Silver Linings - Dream Theater;5;0;black_clouds_silver_linings.jpg;album
-6;Temple of Shadows - Angra;62;0;temple_of_shadows.jpg;album
-7;Melissa - Mercyful Fate;75;0;melissa.jpg;album
-8;Mezmerize - System of a Down;80;0;mezmerize.jpg;album
-9;Discovery - Daft Punk;85;0;discovery.jpg;album
-10;Michael Jackson - Thriller;90;0;thriller.jpg;album
-11;Camisa da banda Xavlegbmaofffassssitimiwoamndutroabcwapwaeiippohfffx;39;0;camisa_xavleg.jpg;camisa
-12;Camisa Megadeth - Piss Sells;42;0;camisa_megadeth.jpg;camisa
-13;Camisa do Santos;37;0;camisa_nsantos.jpg;camisa
-14;Camisa Mustaine Wrote 'Em All;45;0;camisa_mustaine.jpg;camisa
-15;Camisa Beatles;50;0;camisa_beatles.jpg;camisa
-16;Blew - Nirvana;85;0;blew.jpg;ep
-17;Seven Inches of Satanic Panic - Ghost;666;0;seven_inches_ghost.jpg;ep
-18;Iron Lung - Radiohead;90;0;iron_lung.jpg;ep
-19;Helloween - Helloween;90;0;helloween.jpg;ep
+1;In The Court Of The Crimson King - King crimson;45;0;1751853910272-1751554071614-crimson.jpg;album
+2;Bust In Peace - Meggerdeth;65;0;rust_in_peace.jpg;album
+3;Weezer - Weezer                         (weezer(weezer));58;0;1751765708846-weezer.jpg;album
+4;Vida - Padre Fabio de Melo;70;0;1751765725120-favodemelo.jpg;album
+5;Black Clouds & Silver Linings - Dream Theater;5;0;1751765736309-blackclouds.jpg;album
+6;Temple of Shadows - ANGRA;62;0;1751765747370-templeofhate.jpg;album
+7;Mezmerize - System of a Down;80;0;1751765759150-memerize.jpg;album
+8;Discovery - Daft Punk;85;0;1751765782718-Daft_Punk_Discovery.jpg;album
+9;Michael Jackson - Thriller;90;0;1751765794383-Michael_Jackson_-_Thriller.jpg;album
+10;Camisa da banda Xavlegbmaofffassssitimiwoamndutroabcwapwaeiippohfffx;39;0;1751854484671-xavesleg.jpg;camisa
+11;Camisa Megadeth - Piss Sells;42;0;1751854491972-piss.jpg;camisa
+12;Camisa do Santos;37;0;1751854500168-sants.jpeg;camisa
+13;Camisa Mustaine Wrote 'Em All;45;0;1751854507659-mustard.jpg;camisa
+14;Camisa Beatles;50;0;1751854549028-beat.jpg;camisa
+15;Blew - Nirvana;85;0;1751854291202-ew.jpg;ep
+16;Seven Inches of Satanic Panic - Ghost;66.6;0;1751854302134-satanico.jpeg;ep
+17;My Iron Lung - Radiohead;90;0;1751854319394-PNEUMONIA.jpg;ep
+18;Helloween - Helloween;90;0;1751854328017-allhallowseve.jpg;ep
+19;Metal Health - Quiet Riot;64.6;0;1751768339678-metalrelf.jpg;album
+20;Vipera Sapiens - Viper;34;0;1751769508390-viper.jpg;ep
+21;Angels Cry - ANGRA;41;0;1751854018170-andrecry.jpg;album
+22;Somewhere Far Beyond - Blind Guardian;65;0;1751854060528-bard.jpg;album
+23;Heaven and Hell - Black Sabbath;87;0;1751854095379-heaven.jpg;album
+24;Camisa Slipknot;23;0;1751854745227-eloy.jpg;camisa
+25;Camisa de futebol Iron Maiden;32;0;1751855294261-ironmaid.jpg;camisa
+26;Reaching Horizons - ANGRA;46;0;1751855403193-zerodown.jpg;ep
+27;Rain of a Thousand Flames - Rhapsody;21;0;1751855639467-Andre matos and Bruno Valverde's rhapsody.jpg;ep
+28;Sea Shepherd - Gojira;12;0;1751855669087-gorila.jpg;ep
+29;Camisa da Fúria;5;0;1751855726176-fury.jpg;camisa

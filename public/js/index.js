@@ -9,6 +9,23 @@ class produto {
       this.categoria = categoria;
     }
 }
+//verificar o usuario pra mudar os botao
+fetch('/api/usuario')
+.then(res => res.json())
+.then(data => {
+  if (data.logado && data.usuario.tipo === 'admin') {
+    // Mostra o botão só para admin
+    document.getElementById('botaousuarios').style.display = 'inline-block';
+    document.getElementById('botao-toggle-formulario').style.display = 'inline-block';
+    document.getElementById('botaoeditar').style.display = 'inline-block';
+    document.getElementById('botaosucumba').style.display = 'inline-block';
+  }
+})
+.catch(err => {
+  console.error('Erro ao verificar usuário:', err);
+});
+
+
 
 function verificarUsuarioLogado() {
   fetch('/api/usuario')
@@ -27,7 +44,6 @@ function verificarUsuarioLogado() {
 
 // Chame essa função onde quiser, por exemplo, ao carregar a página:
 window.addEventListener('DOMContentLoaded', verificarUsuarioLogado);
-
   
 let listaproduto = [];
   
@@ -49,13 +65,25 @@ function criarElementoProduto(prod) {
         <button class="botao-adicionar" onclick="alterarQuantidade('${prod.id}', 1)">+</button>
       </div>
       <div class="acoes-produto">
-      <button onclick="editarProduto('${prod.id}')">Editar</button>
-      <button onclick="apagarProduto('${prod.id}')">Apagar</button>
+      <button class="botaoeditar" onclick="editarProduto('${prod.id}')" style="display: none; margin-top: 20px;">Editar</button>
+      <button class="botaosucumba" onclick="apagarProduto('${prod.id}')" style="display: none; margin-top: 20px;">Apagar</button>
       </div>
     `;
-  
-    return artigo;
+
+      fetch('/api/usuario')
+      .then(res => res.json())
+      .then(data => {
+      if (data.logado && data.usuario.tipo === 'admin') {
+        const editarBtn = artigo.querySelector('.botaoeditar');
+        const apagarBtn = artigo.querySelector('.botaosucumba');
+        editarBtn.style.display = 'inline-block';
+        apagarBtn.style.display = 'inline-block';
+      }
+    });
+
+  return artigo;
 }
+
 
 
 function urlSemCache(url) {
@@ -184,15 +212,31 @@ window.addEventListener('DOMContentLoaded', carregarProdutos);
 function toggleFormulario() {
   const secao = document.getElementById('adicionar-produto');
   const botao = document.getElementById('botao-toggle-formulario');
+  const form = document.getElementById('form-produto');
+
+  const estaEditando = form.hasAttribute('data-edit-id');
 
   if (secao.style.display === 'none') {
     secao.style.display = 'block';
     botao.textContent = 'Fechar';
+
+    // Se não estamos editando, é adição → resetar form
+    if (!estaEditando) {
+      form.reset();
+      nomeImagemSelecionada = '';
+      document.getElementById('preview-img').src = 'imagens/default.png';
+    }
+
   } else {
     secao.style.display = 'none';
     botao.textContent = 'Adicionar Produto';
+    form.reset();
+    form.removeAttribute('data-edit-id');
+    nomeImagemSelecionada = '';
+    document.getElementById('preview-img').src = 'imagens/default.png';
   }
 }
+
 
 
 
@@ -220,24 +264,6 @@ function previewImagem(event) {
     reader.readAsDataURL(file);
   }
 }
-
-
-
-
-
-
-fetch('/api/usuario')
-.then(res => res.json())
-.then(data => {
-  if (data.logado && data.usuario.tipo === 'admin') {
-    // Mostra o botão só para admin
-    document.getElementById('botao-toggle-formulario').style.display = 'inline-block';
-  }
-})
-.catch(err => {
-  console.error('Erro ao verificar usuário:', err);
-});
-
 
 
 
@@ -271,11 +297,11 @@ function enviarProduto(event) {
   event.preventDefault();
 
   const form = document.getElementById('form-produto');
-
+  
   // Cria um objeto FormData e adiciona todos os campos do form automaticamente
   const formData = new FormData(form);
   formData.set('qtd', '0');
-
+  console.log(formData);
   // Se você tem o id para edição, adicione manualmente (se precisar)
   const editId = form.getAttribute('data-edit-id');
   if (editId) {
@@ -309,6 +335,8 @@ function enviarProduto(event) {
     alert('Erro ao salvar produto.');
   });
 }
+
+
 
 
 // Gera um novo ID com base no último ID da lista

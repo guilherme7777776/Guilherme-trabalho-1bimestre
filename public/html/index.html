@@ -11,17 +11,27 @@
   <main>
     <h1>Loja de Produtos</h1>
     <input class="botao-fixo" type="button" value="Carrinho" onclick="littlecar()" />
+    <div id="container-logar">
+      <button id="botao-logar" onclick="window.location.href='login.html'">Logar</button>
+    </div>
+
+    <!-- Botão flutuante de admin -->
+      <button id="botaousuarios" class="botao-usuarios-flutuante" style="display: none; margin-top: 20px;" onclick="window.location.href='usuarios.html'">
+        👤 Gerenciar Usuários
+      </button>
     <nav>
       <button onclick="mostrar('album')">Vinil</button>
       <button onclick="mostrar('camisa')">Camisas</button>
       <button onclick="mostrar('ep')">EPS</button>
+      
+
     </nav>
     
     <section id="home" class="pagina ativa">
       <h2>Bem-vindo!</h2>
       <p>Escolha uma categoria acima para navegar.</p>
     </section>
-    <button id="botao-toggle-formulario" onclick="toggleFormulario()" style="display: none;">➕ Adicionar Produto</button>
+    <button id="botao-toggle-formulario" onclick="toggleFormulario()" style="display: none; margin-top: 20px;">➕ Adicionar Produto</button>
     <section id="adicionar-produto" style="display: none; margin-top: 20px;">
       <form id="form-produto" onsubmit="enviarProduto(event)" class="produto adicionar-produto" enctype="multipart/form-data">
         <label for="img-prod" class="imagem-produto-preview" style="cursor: pointer;">

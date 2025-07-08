@@ -145,12 +145,13 @@ app.post('/api/cadastrar', async (req, res) => {
   }
 });
 
-app.post('/api/adicionar-produto', async (req, res) => {
-  const { id, nome, preco, qtd, img, categoria } = req.body;
-  if (!nome || !preco || !img || !categoria) {
+app.post('/api/adicionar-produto', upload.single('imagem'), async (req, res) => {
+  const { id, nome, preco, qtd, categoria } = req.body;
+  const img = req.file.filename;
+  if (!nome || !preco || !categoria) {
     return res.status(400).json({ sucesso: false, mensagem: 'Todos os campos são obrigatórios' });
   }
-
+  console.log(req.body);
   try {
     const caminhoCSV = path.join(__dirname, 'dados_em_casa', 'backup.csv.csv');
 
@@ -171,7 +172,7 @@ const salvarCSV = async (caminho, dados) => {
   const cabecalho = 'id;nome;preco;qtd;img;categoria\n';
 
   const linhas = dados.map(prod =>
-    `${prod.id};${prod.nome};${prod.preco};${prod.qtd};${prod.img.replace(/^\/?imagens\//, '')};${prod.categoria}`
+    `${prod.id};${prod.nome};${prod.preco};${prod.qtd};${prod.img.replace('/^\/?imagens\//, ')};${prod.categoria}`
   );
 
   const conteudo = cabecalho + linhas.join('\n');
@@ -182,7 +183,9 @@ const salvarCSV = async (caminho, dados) => {
 
 // Editar produto
 app.post('/api/editar-produto', upload.single('imagem'), async (req, res) => {
+
   try {
+    
     const { id, nome, preco, qtd, categoria } = req.body;
 
     if (!id || !nome || !preco || !categoria) {
@@ -258,5 +261,52 @@ app.post('/api/apagar-produto', async (req, res) => {
 
 
 
-// Configuração do multer para salvar imagens na pasta public/imagens
+const csvPath = path.join(__dirname, 'dados_em_casa', 'backup.csv.csv');
 
+// GET: Ler usuários do CSV e enviar como JSON
+app.get('/api/usuarios', (req, res) => {
+  const usuarios = [];
+  fs.createReadStream(csvPath)
+    .pipe(csv())
+    .on('data', (row) => usuarios.push(row))
+    .on('end', () => {
+      res.json(usuarios);
+    })
+    .on('error', (err) => {
+      console.error('Erro ao ler CSV:', err);
+      res.status(500).json({ erro: 'Erro ao ler usuários' });
+    });
+});
+
+// POST: Recebe lista de usuários e regrava CSV
+app.post('/api/usuarios', async (req, res) => {
+  const usuarios = req.body;
+  if (!Array.isArray(usuarios)) {
+    return res.status(400).json({ erro: 'Formato inválido, espere um array' });
+  }
+
+  try {
+    // Montar CSV manualmente
+    const linhas = ['nome,senha,tipo']; // cabeçalho
+    usuarios.forEach(u => {
+      // Escapar vírgulas e aspas se precisar, simples exemplo:
+      const nome = `"${(u.nome || '').replace(/"/g, '""')}"`;
+      const senha = `"${(u.senha || '').replace(/"/g, '""')}"`;
+      const tipo = `"${(u.tipo || '').replace(/"/g, '""')}"`;
+      linhas.push([nome, senha, tipo].join(','));
+    });
+    const csvConteudo = linhas.join('\n');
+
+    // Salvar arquivo
+    await fsPromises.writeFile(csvPath, csvConteudo, 'utf8');
+
+    res.json({ sucesso: true });
+  } catch (err) {
+    console.error('Erro ao salvar CSV:', err);
+    res.status(500).json({ erro: 'Erro ao salvar usuários' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
