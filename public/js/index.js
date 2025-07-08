@@ -1,4 +1,3 @@
-// Classe para representar cada produto
 class produto {
     constructor(id, nome, preco, qtd, img, categoria) {
       this.id = id;
@@ -19,12 +18,14 @@ window.addEventListener('DOMContentLoaded', () => {
       if (!data.logado) {
         document.getElementById("botao-logar").style.display = 'inline-block';
       }
+      
     })
     .catch(erro => {
       // Exibe o botão se houver erro (ex: não logado ou erro no servidor)
       document.getElementById("botao-logar").style.display = 'inline-block';
     });
 });
+
 
 //verificar o usuario pra mudar os botao
 fetch('/api/usuario')
@@ -34,8 +35,7 @@ fetch('/api/usuario')
     // Mostra o botão só para admin
     document.getElementById('botaousuarios').style.display = 'inline-block';
     document.getElementById('botao-toggle-formulario').style.display = 'inline-block';
-    document.getElementById('botaoeditar').style.display = 'inline-block';
-    document.getElementById('botaosucumba').style.display = 'inline-block';
+
   }
 })
 .catch(err => {
