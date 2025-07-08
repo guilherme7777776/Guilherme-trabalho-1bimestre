@@ -3,15 +3,16 @@ console.log(levarParaCarrinho);
 async function logar() {
   const nome = document.getElementById("idnome").value;
   const senha = document.getElementById("idsenha").value;
-
+  console.log(nome,senha);
   const resposta = await fetch('/api/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ usuario: nome, senha: senha })
   });
-
+  console.log(resposta)
   const resultado = await resposta.json();
   console.log(resultado);
+  
   if (resultado.sucesso) {
     alert("Parabéns, login realizado com sucesso!");
     if(levarParaCarrinho == 1){
