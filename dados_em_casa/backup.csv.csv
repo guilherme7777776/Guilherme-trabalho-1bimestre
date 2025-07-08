@@ -1,8 +1,7 @@
 id;nome;preco;qtd;img;categoria
-<<<<<<< HEAD
 1;In The Court Of The Crimson King - King crimson;45;0;1751853910272-1751554071614-crimson.jpg;album
 2;Bust In Peace - Meggerdeth;65;0;rust_in_peace.jpg;album
-3;Weezer - Weezer                         (weezer(weezer));58;0;1751765708846-weezer.jpg;album
+3;Weezer - Weezer(weezer(weezer));58;0;1751765708846-weezer.jpg;album
 4;Vida - Padre Fabio de Melo;70;0;1751765725120-favodemelo.jpg;album
 5;Black Clouds & Silver Linings - Dream Theater;5;0;1751765736309-blackclouds.jpg;album
 6;Temple of Shadows - ANGRA;62;0;1751765747370-templeofhate.jpg;album
@@ -29,3 +28,5 @@ id;nome;preco;qtd;img;categoria
 27;Rain of a Thousand Flames - Rhapsody;21;0;1751855639467-Andre matos and Bruno Valverde's rhapsody.jpg;ep
 28;Sea Shepherd - Gojira;12;0;1751855669087-gorila.jpg;ep
 29;Camisa da Fúria;5;0;1751855726176-fury.jpg;camisa
+30;Vol.4 - Black Sabbath;90;0;1751981278571-vol4.jpg;album
+31;viper- evolution;32;0;1751984820066-evolution.jpeg;album
