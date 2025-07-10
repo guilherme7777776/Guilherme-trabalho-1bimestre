@@ -306,8 +306,3 @@ app.post('/api/usuarios', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao salvar usuários' });
   }
 });
-  } catch (err) {
-    console.error('Erro ao salvar CSV:', err);
-    res.status(500).json({ erro: 'Erro ao salvar usuários' });
-  }
-});
