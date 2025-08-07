@@ -99,6 +99,7 @@ app.post('/api/login', async (req, res) => {
 // Rota: Logout
 app.post('/api/logout', (req, res) => {
   req.session.destroy(() => {
+    res.clearCookie('connect.sid', { path: '/' }); // <- ESSENCIAL!
     res.json({ sucesso: true });
   });
 });
@@ -306,3 +307,5 @@ app.post('/api/usuarios', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao salvar usuários' });
   }
 });
+
+
